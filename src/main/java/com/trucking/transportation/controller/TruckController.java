@@ -25,7 +25,7 @@ public class TruckController {
     }
 
     @GetMapping("/trucks/{id}")
-    public ResponseEntity<Object> getTruck(@PathVariable("id") Long id) {
+    public ResponseEntity<Object> getTruck(@PathVariable(name = "id") Long id) {
         return new ResponseEntity<>(deliveryService.getTruckById(id), HttpStatus.OK);
     }
 
@@ -35,14 +35,14 @@ public class TruckController {
         return new ResponseEntity<>("Truck was added successfully", HttpStatus.CREATED);
     }
 
-    @PutMapping("/trucks/{id}")
-    public ResponseEntity<Object> updateTruck(@PathVariable("id") Long id, @RequestBody Truck t) {
-        deliveryService.updateTruck(id, t);
+    @PutMapping("/trucks")
+    public ResponseEntity<Object> updateTruck(@RequestBody Truck t) {
+        deliveryService.updateTruck(t);
         return new ResponseEntity<>("Truck was updated successfully", HttpStatus.OK);
     }
 
     @DeleteMapping("/trucks/{id}")
-    public ResponseEntity<Object> deleteTruck(@PathVariable("id") Long id) {
+    public ResponseEntity<Object> deleteTruck(@PathVariable(name = "id") Long id) {
         deliveryService.deleteTruck(id);
         return new ResponseEntity<>("Truck was deleted successfully", HttpStatus.OK);
     }

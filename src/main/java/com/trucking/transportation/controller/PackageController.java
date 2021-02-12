@@ -24,8 +24,8 @@ public class PackageController {
         return new ResponseEntity<>(deliveryService.getAllPackages(), HttpStatus.OK);
     }
 
-    @GetMapping("/packages/id")
-    public ResponseEntity<Object> getPackage(@PathVariable Long id) {
+    @GetMapping("/packages/{id}")
+    public ResponseEntity<Object> getPackage(@PathVariable(name = "id") Long id) {
         return new ResponseEntity<>(deliveryService.getPackageById(id), HttpStatus.OK);
     }
 
@@ -35,14 +35,14 @@ public class PackageController {
         return new ResponseEntity<>("Package was created successfully", HttpStatus.CREATED);
     }
 
-    @PutMapping("/packages/id")
-    public ResponseEntity<Object> updatePackage(@PathVariable Long id, @RequestBody Package p) {
-        deliveryService.updatePackage(id, p);
+    @PutMapping("/packages")
+    public ResponseEntity<Object> updatePackage(@RequestBody Package p) {
+        deliveryService.updatePackage(p);
         return new ResponseEntity<>("Package was updated successfully", HttpStatus.OK);
     }
 
-    @DeleteMapping("/packages/id")
-    public ResponseEntity<Object> deletePackage(@PathVariable Long id) {
+    @DeleteMapping("/packages/{id}")
+    public ResponseEntity<Object> deletePackage(@PathVariable(name = "id") Long id) {
         deliveryService.deletePackage(id);
         return new ResponseEntity<>("Package was deleted successfully", HttpStatus.OK);
     }

@@ -67,11 +67,13 @@ public class DeliveryServiceImpl implements DeliveryService {
     }
 
     @Override
-    public void updatePackage(Long packageID, Package p) {
-        Package pkg = getPackageById(packageID);
+    public void updatePackage(Package p) {
+        Package pkg = getPackageById(p.getPackageID());
         if (pkg == null) {
-            throw new RuntimeException("A package with the ID of " + packageID + " could not be found");
-        } else { packageRepository.save(p); }
+            throw new RuntimeException("A package with the ID of " + p.getPackageID() + " could not be found");
+        } else {
+            packageRepository.save(p);
+        }
     }
 
     @Override
@@ -100,21 +102,21 @@ public class DeliveryServiceImpl implements DeliveryService {
     }
 
     @Override
-    public void updateTruck(Long truckID, Truck t) {
-        Truck trk = getTruckById(truckID);
+    public void updateTruck(Truck t) {
+        Truck trk = getTruckById(t.getTruckID());
         if (trk == null) {
-            throw new RuntimeException("A truck with the ID of " + truckID + " could not be found");
+            throw new RuntimeException("A truck with the ID of " + t.getTruckID() + " could not be found");
         } else { truckRepository.save(t); }
     }
 
     @Override
     public void deleteTruck(Long truckID) {
-        for (Truck trk : truckRepository.findAll()) {
-            if (trk.getTruckID().equals(truckID)) {
-                truckRepository.delete(trk);
-            }
+        Truck trk = truckRepository.findByTruckID(truckID);
+        if (trk != null) {
+            truckRepository.delete(trk);
+        } else {
+            throw new RuntimeException("A truck with the ID of " + truckID + " could not be found");
         }
-        throw new RuntimeException("A truck with the ID of " + truckID + " could not be found");
     }
 
     @Override
@@ -122,6 +124,16 @@ public class DeliveryServiceImpl implements DeliveryService {
         if (tm.getTruckManifestID() != null) {
             throw new RuntimeException("A truck manifest with the ID of " + tm.getTruckManifestID() + " already exists");
         } else { truckManifestRepository.save(tm); }
+    }
+
+    @Override
+    public void addTruckToManifest(Long manifestID, Truck t) {
+        TruckManifest tm = truckManifestRepository.findByTruckManifestID(manifestID);
+        if (tm != null) {
+            tm.setTruck(t);
+        } else {
+            throw new RuntimeException("A truck manifest with the ID of " + manifestID + " does not exist");
+        }
     }
 
     @Override
@@ -133,21 +145,21 @@ public class DeliveryServiceImpl implements DeliveryService {
     }
 
     @Override
-    public void updateTruckManifest(Long truckManifestID, TruckManifest tm) {
-        TruckManifest truckManifest = getTruckManifestById(truckManifestID);
+    public void updateTruckManifest(TruckManifest tm) {
+        TruckManifest truckManifest = getTruckManifestById(tm.getTruckManifestID());
         if (truckManifest == null) {
-            throw new RuntimeException("A truck manifest with the ID of " + truckManifestID + " could not be found");
+            throw new RuntimeException("A truck manifest with the ID of " + tm.getTruckManifestID() + " could not be found");
         } else { truckManifestRepository.save(tm); }
     }
 
     @Override
     public void deleteTruckManifest(Long truckManifestID) {
-        for (TruckManifest truckManifest : truckManifestRepository.findAll()) {
-            if (truckManifest.getTruckManifestID().equals(truckManifestID)) {
-                truckManifestRepository.delete(truckManifest);
-            }
+        TruckManifest tm = truckManifestRepository.findByTruckManifestID(truckManifestID);
+        if (tm != null) {
+            truckManifestRepository.delete(tm);
+        } else {
+            throw new RuntimeException("A truck manifest with the ID of " + truckManifestID + " could not be found");
         }
-        throw new RuntimeException("A truck manifest with the ID of " + truckManifestID + " could not be found");
     }
 
     @Override
@@ -164,18 +176,19 @@ public class DeliveryServiceImpl implements DeliveryService {
 
     @Override
     public void load(Package p, Long truckManifestID) {
-        for (TruckManifest tm : truckManifestRepository.findAll()) {
-            if (tm.getTruckManifestID().equals(truckManifestID)) {
-                if (p.getPackageID() == null) {
-                    createPackage(p);
-                }
-                if (!p.getTruckManifest().equals(tm)) {
-                    tm.setPackages(p);
-                }
+        TruckManifest tm = truckManifestRepository.findByTruckManifestID(truckManifestID);
+        if (tm != null) {
+            if (p.getPackageID() == null) {
+                createPackage(p);
             }
+            if (!p.getTruckManifest().equals(tm)) {
+                tm.setPackages(p);
+            } else {
+                throw new RuntimeException("A package with the ID of " + p.getPackageID() + " is already loaded");
+            }
+        } else {
+            throw new RuntimeException("A truck manifest with the ID of " + truckManifestID + " could not be found");
         }
-        throw new RuntimeException("A truck manifest with the ID of " + truckManifestID + " could not be found or package " +
-                "is already loaded");
     }
 
     @Override

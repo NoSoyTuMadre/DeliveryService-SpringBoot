@@ -15,17 +15,18 @@ public interface DeliveryService {
 
     void createPackage(Package p);
     Package getPackageById(Long id);
-    void updatePackage(Long packageID, Package p);
+    void updatePackage(Package p);
     void deletePackage(Long packageID);
 
     void createTruck(Truck t);
     Truck getTruckById(Long truckID);
-    void updateTruck(Long truckID, Truck t);
+    void updateTruck(Truck t);
     void deleteTruck(Long truckID);
 
     void createTruckManifest(TruckManifest tm);
+    void addTruckToManifest(Long manifestID, Truck t);
     TruckManifest getTruckManifestById(Long truckManifestID);
-    void updateTruckManifest(Long truckManifestID, TruckManifest tm);
+    void updateTruckManifest(TruckManifest tm);
     void deleteTruckManifest(Long truckManifestID);
 
     void addPackageToManifest(Long truckManifestID, Package p);

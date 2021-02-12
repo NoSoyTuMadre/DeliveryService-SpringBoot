@@ -1,6 +1,7 @@
 package com.trucking.transportation.controller;
 
 import com.trucking.transportation.entity.Package;
+import com.trucking.transportation.entity.Truck;
 import com.trucking.transportation.entity.TruckManifest;
 import com.trucking.transportation.repository.TruckManifestRepository;
 import com.trucking.transportation.service.DeliveryService;
@@ -22,7 +23,7 @@ public class TruckManifestController {
     DeliveryService deliveryService;
 
     @GetMapping("/manifests/packages/{id}")
-    List<Package> getLoadedPackages(@PathVariable Long id) {
+    List<Package> getLoadedPackages(@PathVariable(name = "id") Long id) {
         for (TruckManifest tm : manifestRepository.findAll()) {
             if (tm.getTruckManifestID().equals(id)) {
                 return manifestRepository.findByTruckManifestID(id).getPackages();
@@ -32,7 +33,7 @@ public class TruckManifestController {
     }
 
     @PostMapping("/manifests/packages/{id}")
-    public ResponseEntity<Object> addPackageToManifest(@PathVariable("id") Long id, @RequestBody Package p) {
+    public ResponseEntity<Object> addPackageToManifest(@PathVariable(name = "id") Long id, @RequestBody Package p) {
         deliveryService.load(p, id);
         return new ResponseEntity<>("Package was added to truck manifest successfully", HttpStatus.CREATED);
     }
@@ -43,7 +44,7 @@ public class TruckManifestController {
     }
 
     @GetMapping("/manifests/{id}")
-    public ResponseEntity<Object> getTruckManifest(@PathVariable("id") Long id) {
+    public ResponseEntity<Object> getTruckManifest(@PathVariable(name = "id") Long id) {
         return new ResponseEntity<>(deliveryService.getTruckManifestById(id), HttpStatus.OK);
     }
 
@@ -53,15 +54,21 @@ public class TruckManifestController {
         return new ResponseEntity<>("Truck manifest was created successfully", HttpStatus.CREATED);
     }
 
-    @PutMapping("/manifests/{id}")
-    public ResponseEntity<Object> updateTruckManifest(@PathVariable("id") Long id, @RequestBody TruckManifest tm) {
-        deliveryService.updateTruckManifest(id, tm);
+    @PutMapping("/manifests")
+    public ResponseEntity<Object> updateTruckManifest(@RequestBody TruckManifest tm) {
+        deliveryService.updateTruckManifest(tm);
         return new ResponseEntity<>("Truck manifest was updated successfully", HttpStatus.OK);
     }
 
     @DeleteMapping("/manifests/{id}")
-    public ResponseEntity<Object> deleteTruckManifest(@PathVariable("id") Long id) {
+    public ResponseEntity<Object> deleteTruckManifest(@PathVariable(name = "id") Long id) {
         deliveryService.deleteTruckManifest(id);
         return new ResponseEntity<>("Truck manifest was deleted successfully", HttpStatus.OK);
+    }
+
+    @PostMapping("/manifests/truck/{id}")
+    public ResponseEntity<Object> addTruckToManifest(@PathVariable(name = "id") Long id, @RequestBody Truck t) {
+        deliveryService.addTruckToManifest(id, t);
+        return new ResponseEntity<>("Package was added to truck manifest successfully", HttpStatus.OK);
     }
 }
