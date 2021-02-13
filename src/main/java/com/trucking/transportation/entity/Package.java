@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 public class Package {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "PACKAGE_ID") private Long packageID;
     @Column(name = "SRC_ADDRESS") private String sourceAddress;
     @Column(name = "DEST_ADDRESS") private String destinationAddress;
@@ -37,5 +37,4 @@ public class Package {
         this.sourceAddress = sourceAddress;
         this.destinationAddress = destinationAddress;
     }
-
 }

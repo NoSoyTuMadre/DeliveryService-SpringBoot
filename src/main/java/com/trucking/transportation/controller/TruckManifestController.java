@@ -66,9 +66,10 @@ public class TruckManifestController {
         return new ResponseEntity<>("Truck manifest was deleted successfully", HttpStatus.OK);
     }
 
-    @PostMapping("/manifests/truck/{id}")
-    public ResponseEntity<Object> addTruckToManifest(@PathVariable(name = "id") Long id, @RequestBody Truck t) {
-        deliveryService.addTruckToManifest(id, t);
+    @PostMapping("/manifests/truck/{id},{truckId}")
+    public ResponseEntity<Object> addTruckToManifest(@PathVariable(name = "id") Long id,
+                                                     @PathVariable(name = "truckId") Long truckId) {
+        deliveryService.addTruckToManifest(id, truckId);
         return new ResponseEntity<>("Package was added to truck manifest successfully", HttpStatus.OK);
     }
 }

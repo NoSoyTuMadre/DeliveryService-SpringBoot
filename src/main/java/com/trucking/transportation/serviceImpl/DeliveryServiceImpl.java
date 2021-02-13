@@ -127,10 +127,14 @@ public class DeliveryServiceImpl implements DeliveryService {
     }
 
     @Override
-    public void addTruckToManifest(Long manifestID, Truck t) {
+    public void addTruckToManifest(Long manifestID,Long truckID) {
         TruckManifest tm = truckManifestRepository.findByTruckManifestID(manifestID);
-        if (tm != null) {
+        Truck t = truckRepository.findByTruckID(truckID);
+        if (tm != null && t != null) {
             tm.setTruck(t);
+            t.setTruckManifests(tm);
+        } else if (tm != null) {
+            throw new RuntimeException("A truck with the ID of " + truckID + " does not exist");
         } else {
             throw new RuntimeException("A truck manifest with the ID of " + manifestID + " does not exist");
         }

@@ -3,7 +3,6 @@ package com.trucking.transportation.service;
 import com.trucking.transportation.entity.Package;
 import com.trucking.transportation.entity.Truck;
 import com.trucking.transportation.entity.TruckManifest;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -24,7 +23,7 @@ public interface DeliveryService {
     void deleteTruck(Long truckID);
 
     void createTruckManifest(TruckManifest tm);
-    void addTruckToManifest(Long manifestID, Truck t);
+    void addTruckToManifest(Long manifestID, Long truckID);
     TruckManifest getTruckManifestById(Long truckManifestID);
     void updateTruckManifest(TruckManifest tm);
     void deleteTruckManifest(Long truckManifestID);

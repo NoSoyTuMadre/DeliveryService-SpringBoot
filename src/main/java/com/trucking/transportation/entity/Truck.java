@@ -17,7 +17,7 @@ import java.util.List;
 @Table(name = "TRUCK")
 public class Truck {
 
-    @Id @GeneratedValue @Column(name = "TRUCK_ID") private Long truckID;
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY) @Column(name = "TRUCK_ID") private Long truckID;
     private Long odometer;
 
     @OneToMany(cascade = CascadeType.ALL)
@@ -26,5 +26,9 @@ public class Truck {
     private List<TruckManifest> truckManifests;
 
     Truck(Long odometer) { this.odometer = odometer; }
+
+    public void setTruckManifests(TruckManifest tm) {
+        this.truckManifests.add(tm);
+    }
 
 }
