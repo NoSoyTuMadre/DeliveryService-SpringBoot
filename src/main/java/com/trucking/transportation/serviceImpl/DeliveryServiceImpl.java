@@ -132,7 +132,9 @@ public class DeliveryServiceImpl implements DeliveryService {
         Truck t = truckRepository.findByTruckID(truckID);
         if (tm != null && t != null) {
             tm.setTruck(t);
+            truckManifestRepository.save(tm);
             t.setTruckManifests(tm);
+            //truckRepository.save(t);  // TODO
         } else if (tm != null) {
             throw new RuntimeException("A truck with the ID of " + truckID + " does not exist");
         } else {

@@ -25,7 +25,7 @@ public class Package {
     @Column(name = "DEST_ADDRESS") private String destinationAddress;
     @Column(name = "DELIVERY_TIME") private LocalDateTime deliveryTime;
 
-    @ManyToOne(targetEntity = TruckManifest.class, cascade = CascadeType.ALL)
+    @ManyToOne(targetEntity = TruckManifest.class)
     @JoinColumn(name = "MANIFEST.MANIFEST_ID")
     private TruckManifest truckManifest;
 

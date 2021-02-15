@@ -32,7 +32,7 @@ public class TruckManifest {
     @Column(name = "PACKAGES")
     private List<Package> packages;
 
-    @ManyToOne(targetEntity = Truck.class, cascade = CascadeType.ALL)
+    @ManyToOne(targetEntity = Truck.class)
     @JoinColumn(name = "TRUCK.TRUCK_ID")
     private Truck truck;
 

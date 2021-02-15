@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -27,8 +28,8 @@ public class Truck {
 
     Truck(Long odometer) { this.odometer = odometer; }
 
-    public void setTruckManifests(TruckManifest tm) {
-        this.truckManifests.add(tm);
+    public void setTruckManifests(TruckManifest...tm) {
+        truckManifests.addAll(Arrays.asList(tm));
     }
 
 }
